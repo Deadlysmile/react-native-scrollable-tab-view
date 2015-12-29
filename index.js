@@ -35,6 +35,9 @@ var ScrollableTabView = React.createClass({
         } else {this.scrollView.setPage(pageNumber);}
 
         this.setState({currentPage: pageNumber});
+        if(this.props.pageChanged){
+            this.props.pageChanged(pageNumber);
+        }
     },
 
     renderTabBar(props) {
@@ -55,7 +58,6 @@ var ScrollableTabView = React.createClass({
                     pagingEnabled
                     style={styles.scrollableContentIOS}
                     ref={(scrollView) => { this.scrollView = scrollView }}
-                    contentOffset={{x:this.props.initialPage * deviceWidth}}
                     onScroll={(e) => {
                         var offsetX = e.nativeEvent.contentOffset.x;
                         this._updateScrollValue(offsetX / deviceWidth);
@@ -105,6 +107,7 @@ var ScrollableTabView = React.createClass({
     },
 
     _updateSelectedPage (currentPage) {
+        console.log(currentPage);
         if(typeof currentPage === 'object') {
             currentPage = currentPage.nativeEvent.position;
         }
