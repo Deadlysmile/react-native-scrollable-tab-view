@@ -55,6 +55,7 @@ var ScrollableTabView = React.createClass({
                     pagingEnabled
                     style={styles.scrollableContentIOS}
                     ref={(scrollView) => { this.scrollView = scrollView }}
+                    contentOffset={{{x:this.props.initialPage * deviceWidth}}}
                     onScroll={(e) => {
                         var offsetX = e.nativeEvent.contentOffset.x;
                         this._updateScrollValue(offsetX / deviceWidth);
