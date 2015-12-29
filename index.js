@@ -10,14 +10,16 @@ var ScrollableTabView = React.createClass({
     statics: {
         DefaultTabBar
     },
-
     getDefaultProps() {
-        return {tabBarPosition: 'top', edgeHitWidth: 30, springTension: 50, springFriction: 10}
+        return {
+            tabBarPosition: 'top',
+            edgeHitWidth: 30,
+            springTension: 50,
+            springFriction: 10
+        }
     },
-
     getInitialState() {
         var currentPage = this.props.initialPage || 0;
-
         return {currentPage: currentPage, scrollValue: new Animated.Value(currentPage)};
     },
 
@@ -76,12 +78,13 @@ var ScrollableTabView = React.createClass({
             return (
                 <ViewPagerAndroid
                     style={styles.scrollableContentAndroid}
+                    initialPage={this.props.initialPage}
                     onPageScroll={(e) => {
                         const {offset, position} = e.nativeEvent;
                         this._updateScrollValue(position + offset);
                     }}
                     onPageSelected={(e) => {
-                        this.setState({currentPage: e.nativeEvent.position});
+                        this._updateSelectedPage(e.nativeEvent.position);
                     }}
                     ref={(scrollView) => {
                         this.scrollView = scrollView
@@ -105,6 +108,9 @@ var ScrollableTabView = React.createClass({
             currentPage = currentPage.nativeEvent.position;
         }
         this.setState({currentPage});
+        if(this.props.pageChanged){
+            this.props.pageChanged(currentPage);
+        }
     },
 
     _updateScrollValue(value) {
