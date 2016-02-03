@@ -8,7 +8,7 @@ var deviceWidth = Dimensions.get('window').width;
 var Pages = ({children}) => (
     children.map((child, i) =>
         <View
-            key={children.tabLabel + '_' + i}
+            key={child.tabLabel + '_' + i}
             style={styles.page}>
             {child}
         </View>
