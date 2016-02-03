@@ -1,10 +1,17 @@
 'use strict';
-
 var React = require('react-native');
 var {Dimensions, View, Animated, ScrollView, Platform, StyleSheet, ViewPagerAndroid} = React;
 
 var DefaultTabBar = require('./DefaultTabBar');
 var deviceWidth = Dimensions.get('window').width;
+
+var Page = ({child, index}) => (
+    <View
+        key={child.props.tabLabel + '_' + index}
+        style={styles.page}>
+        {child}
+    </View>
+);
 
 var ScrollableTabView = React.createClass({
     statics: {
@@ -74,7 +81,7 @@ var ScrollableTabView = React.createClass({
                     showsHorizontalScrollIndicator={false}
                     directionalLockEnabled
                     alwaysBounceVertical={false}>
-                    {this.props.children}
+                    {this.props.children.map((child, i) => <Page child={child} index={i}/>)}
                 </ScrollView>
             );
         } else {
@@ -92,22 +99,12 @@ var ScrollableTabView = React.createClass({
                     ref={(scrollView) => {
                         this.scrollView = scrollView
                     }}>
-                    {this.props.children.map((child, index) => {
-                        return (
-                            <View
-                                key={child.props.tabLabel + '_' + index}
-                                style={{width: deviceWidth}}>
-                                {child}
-                            </View>
-                        );
-                    })}
+                    {this.props.children.map((child, i) => <Page child={child} index={i}/>)}
                 </ViewPagerAndroid>
             );
         }
     },
-
     _updateSelectedPage (currentPage) {
-        console.log(currentPage);
         if(typeof currentPage === 'object') {
             currentPage = currentPage.nativeEvent.position;
         }
@@ -163,5 +160,8 @@ var styles = StyleSheet.create({
     },
     scrollableContentAndroid: {
         flex: 1
+    },
+    page: {
+        width: deviceWidth
     }
 });
