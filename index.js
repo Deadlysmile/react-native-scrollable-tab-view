@@ -5,12 +5,14 @@ var {Dimensions, View, Animated, ScrollView, Platform, StyleSheet, ViewPagerAndr
 var DefaultTabBar = require('./DefaultTabBar');
 var deviceWidth = Dimensions.get('window').width;
 
-var Page = ({child, index}) => (
-    <View
-        key={child.props.tabLabel + '_' + index}
-        style={styles.page}>
-        {child}
-    </View>
+var Pages = ({children}) => (
+    children.map((child, i) =>
+        <View
+            key={children.props.tabLabel + '_' + i}
+            style={styles.page}>
+            {child}
+        </View>
+    )
 );
 
 var ScrollableTabView = React.createClass({
@@ -81,7 +83,7 @@ var ScrollableTabView = React.createClass({
                     showsHorizontalScrollIndicator={false}
                     directionalLockEnabled
                     alwaysBounceVertical={false}>
-                    {this.props.children.map((child, i) => <Page child={child} index={i}/>)}
+                    <Pages>{this.props.children}</Pages>
                 </ScrollView>
             );
         } else {
@@ -99,7 +101,7 @@ var ScrollableTabView = React.createClass({
                     ref={(scrollView) => {
                         this.scrollView = scrollView
                     }}>
-                    {this.props.children.map((child, i) => <Page child={child} index={i}/>)}
+                    <Pages>{this.props.children}</Pages>
                 </ViewPagerAndroid>
             );
         }
